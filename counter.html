@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Counter App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        #counter {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<button id="startStopButton">Start/Stop</button>
+<button id="incrementButton">Increment</button>
+<button id="decrementButton">Decrement</button>
+<div id="counter">0</div>
+
+<script>
+    class Counter {
+        constructor() {
+            this.count = 0;
+            this.intervalId = null;
+            this.isAutomatic = false;
+        }
+
+        startStop() {
+            if (this.isAutomatic) {
+                this.stop();
+            } else {
+                this.start();
+            }
+        }
+
+        start() {
+            this.intervalId = setInterval(() => {
+                this.increment();
+                this.updateCounter();
+            }, 1000);
+            this.isAutomatic = true;
+            this.updateButtonLabel();
+        }
+
+        stop() {
+            clearInterval(this.intervalId);
+            this.isAutomatic = false;
+            this.updateButtonLabel();
+        }
+
+        increment() {
+            this.count++;
+        }
+
+        decrement() {
+            this.count--;
+        }
+
+        updateCounter() {
+            document.getElementById('counter').textContent = this.count;
+        }
+
+        updateButtonLabel() {
+            const startStopButton = document.getElementById('startStopButton');
+            startStopButton.textContent = this.isAutomatic ? 'Stop' : 'Start';
+        }
+    }
+
+    const counter = new Counter();
+
+    document.getElementById('startStopButton').addEventListener('click', () => counter.startStop());
+    document.getElementById('incrementButton').addEventListener('click', () => {
+        counter.stop();
+        counter.increment();
+        counter.updateCounter();
+    });
+    document.getElementById('decrementButton').addEventListener('click', () => {
+        counter.stop();
+        counter.decrement();
+        counter.updateCounter();
+    });
+</script>
+
+</body>
+</html>
